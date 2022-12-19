@@ -1,5 +1,6 @@
 import './App.css';
-function App() {
+import React, {useState} from 'react';
+function App(){
   return (
 
     <div className="bg-accent text-gray-100 py-1">
@@ -18,7 +19,7 @@ function App() {
               type="text" placeholder="Your Full Name" required />
           </div>
           <div className="mt-8 ">
-            <span className="uppercase text-sm text-gray-600 font-bold">Sectors:</span>
+            <span className="uppercase text-sm text-gray-600 font-bold">Name:</span>
             <select className='bg-white' multiple="" size={5} required>
 
               <option value={1}>Manufacturing</option>
