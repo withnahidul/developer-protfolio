@@ -32,7 +32,7 @@ function App() {
 
   // getting data function
   const getData = () => {
-    axios.get('https://sheet.best/api/sheets/e7a8bead-e947-4de5-9421-8e17433a3fff').then((response) => {
+    axios.get('https://v1.nocodeapi.com/withnahidul/google_sheets/lKlYBoolJJwpaYdk').then((response) => {
       setData(response.data);
     })
   }
