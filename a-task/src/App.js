@@ -1,13 +1,54 @@
 import './App.css';
-import React, {useState} from 'react';
-function App(){
-  return (
+import { useState, useEffect } from 'react'
+import axios from 'axios'
+import { Data } from './Components/Data'
 
+
+
+function App() {
+  // form states
+  const [name, setName] = useState('');
+  const [sector, setSector] = useState('');
+  
+  // retrived data state
+  const [data, setData] = useState([]);
+
+  // submit event
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // console.log(name, sector, designation, salary);
+
+    // our object to pass
+    const data = {
+      name, sector
+    }
+    axios.post('https://v1.nocodeapi.com/withnahidul/google_sheets/lKlYBoolJJwpaYdk', data).then(response => {
+      // console.log(response);
+      setName('');
+      setSector('');
+     
+    })
+  }
+
+  // getting data function
+  const getData = () => {
+    axios.get('https://sheet.best/api/sheets/e7a8bead-e947-4de5-9421-8e17433a3fff').then((response) => {
+      setData(response.data);
+    })
+  }
+
+  // triggering function
+  useEffect(() => {
+    getData();
+  }, [data])
+
+
+  return (
     <div className="bg-accent text-gray-100 py-1">
 
       <div className="max-w-screen-xl mb-8 mt-24 px-8 grid gap-8 grid-cols-1 md:grid-cols-2 md:px-12 lg:px-16 xl:px-32 py-16 mx-auto bg-gray-100 text-gray-900 rounded-lg shadow-lg">
 
-        <form >
+        <form className='' onSubmit={handleSubmit}>
           <div>
             <h2>
               Please enter your name and pick the Sectors you are currently involved in.
@@ -16,11 +57,12 @@ function App(){
             <span className="uppercase text-sm text-gray-600 font-bold">Name:</span>
 
             <input className="w-full bg-gray-300 text-gray-900 mt-2 p-3 rounded-lg focus:outline-none focus:shadow-outline"
-              type="text" placeholder="Your Full Name" required />
+              onChange={(e) => setName(e.target.value)} value={name}  type="text" placeholder="Your Full Name" required />
           </div>
           <div className="mt-8 ">
-            <span className="uppercase text-sm text-gray-600 font-bold">Name:</span>
-            <select className='bg-white' multiple="" size={5} required>
+            <span className="uppercase text-sm text-gray-600 font-bold">Sector:</span>
+            <select className='bg-white' multiple="" size={5} required
+              placeholder='' onChange={(e) => setSector(e.target.value)} value={sector}>
 
               <option value={1}>Manufacturing</option>
               <option value={19}>&nbsp;&nbsp;&nbsp;&nbsp;Construction materials</option>
@@ -238,14 +280,33 @@ function App(){
           </div>
           <div className="mt-8">
             <button
-              mailto="mailto:mdrashadul.rimon@gmail.com"
-              className="uppercase text-sm font-bold tracking-wide bg-indigo-500 text-gray-100 p-3 rounded-lg w-full focus:outline-none focus:shadow-outline">
+              type='submit'
+           className="uppercase text-sm font-bold tracking-wide bg-indigo-500 text-gray-100 p-3 rounded-lg w-full focus:outline-none focus:shadow-outline">
               Save
             </button>
           </div>
+         
         </form>
-
-      </div>
+        <div className='view-data'>
+          {data.length < 1 && <></>}
+          {data.length > 0 && (
+            <div className='table-responsive'>
+              <table className='table'>
+                <thead>
+                  <tr>
+                    <th scope='col'>Index</th>
+                    <th scope='col'>Name</th>
+                    <th scope='col'>Sector</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <Data data={data} />
+                </tbody>
+              </table>
+            </div>
+          )}
+          </div>
+      </div>      
     </div>
 
   );
